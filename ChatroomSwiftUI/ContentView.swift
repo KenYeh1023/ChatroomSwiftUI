@@ -8,9 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var isLoginMode: Bool = false
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView {
+            ScrollView {
+                Picker("picker view", selection: $isLoginMode) {
+                    Text("Login")
+                    Text("Create Account")
+                }.pickerStyle(SegmentedPickerStyle())
+            }
+            .navigationTitle("Create Account")
+        }
     }
 }
 
