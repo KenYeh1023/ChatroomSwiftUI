@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FCB9D5012847018F00D6C1A5 /* ChatroomSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB9D5002847018F00D6C1A5 /* ChatroomSwiftUIApp.swift */; };
-		FCB9D5032847018F00D6C1A5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB9D5022847018F00D6C1A5 /* ContentView.swift */; };
+		FCB9D5032847018F00D6C1A5 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB9D5022847018F00D6C1A5 /* LoginView.swift */; };
 		FCB9D5052847019700D6C1A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCB9D5042847019700D6C1A5 /* Assets.xcassets */; };
 		FCB9D5082847019700D6C1A5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCB9D5072847019700D6C1A5 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -16,7 +16,7 @@
 /* Begin PBXFileReference section */
 		FCB9D4FD2847018E00D6C1A5 /* ChatroomSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatroomSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCB9D5002847018F00D6C1A5 /* ChatroomSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatroomSwiftUIApp.swift; sourceTree = "<group>"; };
-		FCB9D5022847018F00D6C1A5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FCB9D5022847018F00D6C1A5 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		FCB9D5042847019700D6C1A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FCB9D5072847019700D6C1A5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FCB9D5092847019700D6C1A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -53,7 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				FCB9D5002847018F00D6C1A5 /* ChatroomSwiftUIApp.swift */,
-				FCB9D5022847018F00D6C1A5 /* ContentView.swift */,
+				FCB9D5022847018F00D6C1A5 /* LoginView.swift */,
 				FCB9D5042847019700D6C1A5 /* Assets.xcassets */,
 				FCB9D5092847019700D6C1A5 /* Info.plist */,
 				FCB9D5062847019700D6C1A5 /* Preview Content */,
@@ -138,7 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FCB9D5032847018F00D6C1A5 /* ContentView.swift in Sources */,
+				FCB9D5032847018F00D6C1A5 /* LoginView.swift in Sources */,
 				FCB9D5012847018F00D6C1A5 /* ChatroomSwiftUIApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
