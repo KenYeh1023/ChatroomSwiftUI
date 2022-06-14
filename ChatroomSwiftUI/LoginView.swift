@@ -8,17 +8,28 @@
 import SwiftUI
 import Firebase
 
+class FirebaseManager: NSObject {
+    
+    let auth: Auth
+    
+    static let shared = FirebaseManager()
+    
+    override init() {
+        FirebaseApp.configure()
+        self.auth = Auth.auth()
+        
+        super.init()
+    }
+    
+}
+
 
 struct LoginView: View {
     
     @State var isLoginMode: Bool = false
     @State var email = ""
     @State var password = ""
-    
-    init() {
-        FirebaseApp.configure()
-    }
-    
+        
     var body: some View {
         NavigationView {
             ScrollView {
@@ -87,7 +98,7 @@ struct LoginView: View {
     @State var loginStatusMessage: String = ""
     
     private func loginUser() {
-        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { (result, error) in
             if let error = error {
                 loginStatusMessage = "Account Log in Fail, \(error)"
                 return
@@ -97,7 +108,7 @@ struct LoginView: View {
         }
     }
     private func creatUserAccount() {
-        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) { (result, error) in
             if let error = error {
                 loginStatusMessage = "Account Created Fail, \(error)"
                 return
