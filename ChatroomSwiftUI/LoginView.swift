@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 
+
 struct LoginView: View {
     
     @State var isLoginMode: Bool = false
@@ -77,15 +78,24 @@ struct LoginView: View {
     
     func loginButtonPressed() {
         if isLoginMode {
-            print("Need Log in")
+            loginUser()
         } else {
             creatUserAccount()
-            print("Create Account")
         }
     }
     
     @State var loginStatusMessage: String = ""
     
+    private func loginUser() {
+        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                loginStatusMessage = "Account Log in Fail, \(error)"
+                return
+            }
+            
+            loginStatusMessage = "Account Log in Successfully, User: \(result?.user.uid ?? "")"
+        }
+    }
     private func creatUserAccount() {
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             if let error = error {
@@ -93,7 +103,7 @@ struct LoginView: View {
                 return
             }
             
-            loginStatusMessage = "Account Created Successfully, User: \(result?.user.uid)"
+            loginStatusMessage = "Account Created Successfully, User: \(result?.user.uid ?? "")"
         }
     }
 }
