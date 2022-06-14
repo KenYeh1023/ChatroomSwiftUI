@@ -14,6 +14,7 @@
 		FCD154E4284EFEE3004C2F79 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FCD154E3284EFEE3004C2F79 /* GoogleService-Info.plist */; };
 		FCD154E8284F018E004C2F79 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FCD154E7284F018E004C2F79 /* FirebaseAuth */; };
 		FCD154EA284F018E004C2F79 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FCD154E9284F018E004C2F79 /* FirebaseStorage */; };
+		FCD154ED285834F3004C2F79 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD154EC285834F2004C2F79 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		FCB9D5072847019700D6C1A5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FCB9D5092847019700D6C1A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCD154E3284EFEE3004C2F79 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FCD154EC285834F2004C2F79 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 			children = (
 				FCB9D5002847018F00D6C1A5 /* ChatroomSwiftUIApp.swift */,
 				FCB9D5022847018F00D6C1A5 /* LoginView.swift */,
+				FCD154EC285834F2004C2F79 /* ImagePicker.swift */,
 				FCD154E3284EFEE3004C2F79 /* GoogleService-Info.plist */,
 				FCB9D5042847019700D6C1A5 /* Assets.xcassets */,
 				FCB9D5092847019700D6C1A5 /* Info.plist */,
@@ -153,6 +156,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCD154ED285834F3004C2F79 /* ImagePicker.swift in Sources */,
 				FCB9D5032847018F00D6C1A5 /* LoginView.swift in Sources */,
 				FCB9D5012847018F00D6C1A5 /* ChatroomSwiftUIApp.swift in Sources */,
 			);
