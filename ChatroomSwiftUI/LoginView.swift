@@ -6,12 +6,17 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct LoginView: View {
     
     @State var isLoginMode: Bool = false
     @State var email = ""
     @State var password = ""
+    
+    init() {
+        FirebaseApp.configure()
+    }
     
     var body: some View {
         NavigationView {
@@ -54,6 +59,9 @@ struct LoginView: View {
                         }.background(Color.blue)
                         .cornerRadius(5)
                     })
+                    
+                    Text(loginStatusMessage)
+                        .foregroundColor(.red)
                 }
                 .padding()
             }
@@ -71,7 +79,21 @@ struct LoginView: View {
         if isLoginMode {
             print("Need Log in")
         } else {
+            creatUserAccount()
             print("Create Account")
+        }
+    }
+    
+    @State var loginStatusMessage: String = ""
+    
+    private func creatUserAccount() {
+        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                loginStatusMessage = "Account Created Fail, \(error)"
+                return
+            }
+            
+            loginStatusMessage = "Account Created Successfully, User: \(result?.user.uid)"
         }
     }
 }
