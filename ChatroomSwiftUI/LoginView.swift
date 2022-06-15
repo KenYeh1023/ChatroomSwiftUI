@@ -11,13 +11,14 @@ import Firebase
 class FirebaseManager: NSObject {
     
     let auth: Auth
+    let storage: Storage
     
     static let shared = FirebaseManager()
     
     override init() {
         FirebaseApp.configure()
         self.auth = Auth.auth()
-        
+        self.storage = Storage.storage()
         super.init()
     }
     
@@ -138,6 +139,29 @@ struct LoginView: View {
             }
             
             loginStatusMessage = "Account Created Successfully, User: \(result?.user.uid ?? "")"
+            persistImageToStorage()
+        }
+    }
+    
+    private func persistImageToStorage() {
+        guard let image = self.image?.jpegData(compressionQuality: 0.5) else { return }
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let ref = FirebaseManager.shared.storage.reference(withPath: uid)
+        
+        ref.putData(image, metadata: nil) { (metadata, error) in
+            if let error = error {
+                loginStatusMessage = "Upload Profile Picture Failed, \(error)"
+                return
+            }
+            
+            ref.downloadURL { (url, error) in
+                if let error = error {
+                    loginStatusMessage = "Failed to Retrieve download Url, \(error)"
+                    return
+                }
+                
+                loginStatusMessage = "Successfully Stored Image with Url: \(url?.absoluteString ?? "")"
+            }
         }
     }
 }
