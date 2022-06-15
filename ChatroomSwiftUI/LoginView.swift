@@ -29,6 +29,8 @@ struct LoginView: View {
     @State var isLoginMode: Bool = false
     @State var email = ""
     @State var password = ""
+    
+    @State var shouldShowImagwPicker: Bool = false
         
     var body: some View {
         NavigationView {
@@ -44,9 +46,23 @@ struct LoginView: View {
                     
                     if !isLoginMode {
                         Button(action: profileButtonPressed, label: {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 64))
-                                .padding()
+                            VStack {
+                                if let image = self.image {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 128, height: 128)
+                                        .cornerRadius(64)
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .font(.system(size: 64))
+                                        .foregroundColor(.black)
+                                        .padding()
+                                }
+                            }
+                            .overlay(RoundedRectangle(cornerRadius: 64)
+                                        .stroke(Color.black, lineWidth: 3)
+                            )
                         })
                     }
                     
@@ -81,9 +97,16 @@ struct LoginView: View {
                             .ignoresSafeArea())
             .navigationTitle(isLoginMode ? "Log In" : "Create Account")
         }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $shouldShowImagwPicker, onDismiss: nil, content: {
+            ImagePicker(image: $image)
+        })
     }
     
+    @State var image: UIImage?
+    
     func profileButtonPressed() {
+        shouldShowImagwPicker.toggle()
         print("Porfile")
     }
     
