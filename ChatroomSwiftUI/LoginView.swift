@@ -12,6 +12,7 @@ class FirebaseManager: NSObject {
     
     let auth: Auth
     let storage: Storage
+    let firesotre: Firestore
     
     static let shared = FirebaseManager()
     
@@ -19,6 +20,7 @@ class FirebaseManager: NSObject {
         FirebaseApp.configure()
         self.auth = Auth.auth()
         self.storage = Storage.storage()
+        self.firesotre = Firestore.firestore()
         super.init()
     }
     
@@ -159,7 +161,6 @@ struct LoginView: View {
                     loginStatusMessage = "Failed to Retrieve download Url, \(error)"
                     return
                 }
-                
                 loginStatusMessage = "Successfully Stored Image with Url: \(url?.absoluteString ?? "")"
             }
         }
