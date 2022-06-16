@@ -161,7 +161,23 @@ struct LoginView: View {
                     loginStatusMessage = "Failed to Retrieve download Url, \(error)"
                     return
                 }
-                loginStatusMessage = "Successfully Stored Image with Url: \(url?.absoluteString ?? "")"
+                
+                if let url = url {
+                    loginStatusMessage = "Successfully Stored Image with Url: \(url.absoluteString)"
+                    
+                    storeUserInformation(profileImageUrl: url)
+                }
+            }
+        }
+    }
+    
+    private func storeUserInformation(profileImageUrl: URL) {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let userData = ["email": self.email, "uid": uid, "profileImageUrl": profileImageUrl.absoluteString]
+        FirebaseManager.shared.firesotre.collection("users").document(uid).setData(userData) { error in
+            if let error = error {
+                self.loginStatusMessage = "Store User Data Failed: \(error)"
+                return
             }
         }
     }
