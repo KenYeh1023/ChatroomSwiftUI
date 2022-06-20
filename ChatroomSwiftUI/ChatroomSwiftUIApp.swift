@@ -11,7 +11,8 @@ import SwiftUI
 struct ChatroomSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            MainMessagesView()
+//            LoginView()
         }
     }
 }
