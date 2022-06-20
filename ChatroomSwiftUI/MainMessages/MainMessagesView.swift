@@ -56,9 +56,24 @@ struct MainMessagesView: View {
                                 .padding(.vertical, 8)
                         }.padding(.horizontal)
                     }
-                }
+                }.padding(.bottom, 50)
             }
             .navigationBarHidden(true)
+            .overlay(
+                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                HStack {
+                    Spacer()
+                    Text("+ New Message")
+                        .font(.system(size: 16, weight: .bold))
+                    Spacer()
+                }
+                .foregroundColor(.white)
+                .padding(.vertical)
+                .background(Color.blue)
+                .cornerRadius(32)
+                .shadow(radius: 15)
+                .padding(.horizontal)
+            }), alignment: .bottom)
         }
     }
 }
