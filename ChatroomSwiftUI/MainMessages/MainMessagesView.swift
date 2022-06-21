@@ -7,6 +7,26 @@
 
 import SwiftUI
 
+class MainMessagesViewModel: ObservableObject {
+    
+    init() {
+       fetchCurrentUser()
+    }
+    
+    private func fetchCurrentUser() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        FirebaseManager.shared.firesotre.collection("users").document(uid).getDocument { (snapshot, error) in
+            if let error = error {
+                print("Failed to fetch data", error)
+                return
+            }
+            
+            guard let data = snapshot?.data() else { return }
+            print(data)
+        }
+    }
+}
+
 struct MainMessagesView: View {
     
     @State var shouldShowLogOutOptions: Bool = false
