@@ -7,7 +7,14 @@
 
 import SwiftUI
 
+struct ChatUser {
+    let uid, email, profileImageUrl: String
+}
+
 class MainMessagesViewModel: ObservableObject {
+    
+    @Published var message = ""
+    @Published var chatUser: ChatUser?
     
     init() {
        fetchCurrentUser()
@@ -22,7 +29,9 @@ class MainMessagesViewModel: ObservableObject {
             }
             
             guard let data = snapshot?.data() else { return }
-            print(data)
+            guard let uid = data["uid"] as? String, let email = data["email"] as? String, let profileImageUrl = data["profileImageUrl"] as? String else { return }
+            self.chatUser = ChatUser(uid: uid, email: email, profileImageUrl: profileImageUrl)
+                        
         }
     }
 }
@@ -30,6 +39,7 @@ class MainMessagesViewModel: ObservableObject {
 struct MainMessagesView: View {
     
     @State var shouldShowLogOutOptions: Bool = false
+    @ObservedObject private var vm = MainMessagesViewModel()
     
     func settingButtonPressed() {
         shouldShowLogOutOptions.toggle()
@@ -70,7 +80,7 @@ struct MainMessagesView: View {
                 Image(systemName: "person.fill")
                     .font(.system(size: 34, weight: .heavy))
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Pickachu")
+                    Text(vm.chatUser?.email ?? "123")
                         .font(.system(size: 24, weight: .bold))
                     HStack {
                         Circle()
