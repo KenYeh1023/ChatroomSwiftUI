@@ -117,6 +117,11 @@ struct LoginView: View {
         }
     }
     private func creatUserAccount() {
+        
+        if self.image == nil {
+            self.loginStatusMessage = "You must select a image for your profile"
+            return
+        }
         FirebaseManager.shared.auth.createUser(withEmail: email, password: password) { (result, error) in
             if let error = error {
                 loginStatusMessage = "Account Created Fail, \(error)"
@@ -162,6 +167,8 @@ struct LoginView: View {
                 self.loginStatusMessage = "Store User Data Failed: \(error)"
                 return
             }
+            
+            self.didCompleteLoginProcess()
         }
     }
 }
