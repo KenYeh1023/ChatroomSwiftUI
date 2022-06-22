@@ -8,10 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct ChatUser {
-    let uid, email, profileImageUrl: String
-}
-
 class MainMessagesViewModel: ObservableObject {
     
     @Published var message = ""
@@ -36,9 +32,7 @@ class MainMessagesViewModel: ObservableObject {
             }
             
             guard let data = snapshot?.data() else { return }
-            guard let uid = data["uid"] as? String, let email = data["email"] as? String, let profileImageUrl = data["profileImageUrl"] as? String else { return }
-            self.chatUser = ChatUser(uid: uid, email: email, profileImageUrl: profileImageUrl)
-                        
+            self.chatUser = .init(data: data)
         }
     }
     
