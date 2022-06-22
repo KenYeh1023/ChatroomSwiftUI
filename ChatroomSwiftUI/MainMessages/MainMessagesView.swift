@@ -27,7 +27,7 @@ class MainMessagesViewModel: ObservableObject {
         fetchCurrentUser()
     }
     
-    private func fetchCurrentUser() {
+    func fetchCurrentUser() {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         FirebaseManager.shared.firesotre.collection("users").document(uid).getDocument { (snapshot, error) in
             if let error = error {
@@ -127,7 +127,10 @@ struct MainMessagesView: View {
                 ])
             }
             .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil, content: {
-                LoginView()
+                LoginView(didCompleteLoginProcess: {
+                    self.vm.isUserCurrentlyLoggedOut = false
+                    self.vm.fetchCurrentUser()
+                })
             })
         }
     }

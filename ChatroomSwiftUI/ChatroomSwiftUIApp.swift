@@ -12,7 +12,6 @@ struct ChatroomSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
             MainMessagesView()
-//            LoginView()
         }
     }
 }

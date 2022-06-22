@@ -9,11 +9,13 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @State var isLoginMode: Bool = false
-    @State var email = ""
-    @State var password = ""
+    let didCompleteLoginProcess: () -> ()
     
-    @State var shouldShowImagwPicker: Bool = false
+    @State private var isLoginMode: Bool = false
+    @State private var email = ""
+    @State private var password = ""
+    
+    @State private var shouldShowImagwPicker: Bool = false
         
     var body: some View {
         NavigationView {
@@ -111,6 +113,7 @@ struct LoginView: View {
             }
             
             loginStatusMessage = "Account Log in Successfully, User: \(result?.user.uid ?? "")"
+            self.didCompleteLoginProcess()
         }
     }
     private func creatUserAccount() {
@@ -165,6 +168,8 @@ struct LoginView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(didCompleteLoginProcess: {
+            
+        })
     }
 }
