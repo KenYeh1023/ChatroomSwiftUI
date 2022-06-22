@@ -16,9 +16,15 @@ class MainMessagesViewModel: ObservableObject {
     
     @Published var message = ""
     @Published var chatUser: ChatUser?
+    @Published var isUserCurrentlyLoggedOut = false
     
     init() {
-       fetchCurrentUser()
+        
+        DispatchQueue.main.async {
+            self.isUserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil
+        }
+        
+        fetchCurrentUser()
     }
     
     private func fetchCurrentUser() {
@@ -34,6 +40,11 @@ class MainMessagesViewModel: ObservableObject {
             self.chatUser = ChatUser(uid: uid, email: email, profileImageUrl: profileImageUrl)
                         
         }
+    }
+    
+    func handleSignOut() {
+        isUserCurrentlyLoggedOut.toggle()
+        try? FirebaseManager.shared.auth.signOut()
     }
 }
 
@@ -86,7 +97,8 @@ struct MainMessagesView: View {
                     .overlay(RoundedRectangle(cornerRadius: 44).stroke(Color(.label), lineWidth: 1))
                     .shadow(radius: 5)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(vm.chatUser?.email ?? "123")
+                    let email = vm.chatUser?.email.replacingOccurrences(of: "@gmail.com", with: "") ?? ""
+                    Text(email)
                         .font(.system(size: 24, weight: .bold))
                     HStack {
                         Circle()
@@ -109,11 +121,14 @@ struct MainMessagesView: View {
                 ActionSheet.init(title: Text("Settings"), message: Text("What to do Now?"), buttons: [
                     .destructive(Text("Sign Out"), action: {
                         print("Handle Sign out")
+                        vm.handleSignOut()
                     }),
                     .cancel()
                 ])
             }
-            messageView
+            .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil, content: {
+                LoginView()
+            })
         }
     }
     
@@ -136,7 +151,10 @@ struct MainMessagesView: View {
     
     var body: some View {
         NavigationView {
-            customNavBar
+            VStack {
+                customNavBar
+                messageView
+            }
             .navigationBarHidden(true)
             .overlay(newMessageButton, alignment: .bottom)
         }
