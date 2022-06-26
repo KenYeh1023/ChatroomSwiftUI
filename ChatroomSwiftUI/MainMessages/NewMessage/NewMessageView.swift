@@ -6,17 +6,62 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
+
+class NewMessageViewModel: ObservableObject {
+    
+    @Published var users: [ChatUser] = []
+    @Published var errorMessage: String = ""
+    
+    init() {
+        fetchAllUsers()
+    }
+    
+    private func fetchAllUsers() {
+        FirebaseManager.shared.firesotre.collection("users").getDocuments { (documentSnapshot, error) in
+            if let error = error {
+                self.errorMessage = "Failed to get users, \(error)"
+                return
+            }
+            
+            documentSnapshot?.documents.forEach({ (snapshot) in
+                let data = snapshot.data()
+                let user = ChatUser(data: data)
+                if user.uid != FirebaseManager.shared.auth.currentUser?.uid {
+                    self.users.append(user)
+                }
+            })
+        }
+    }
+    
+}
 
 struct NewMessageView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    
+    @ObservedObject var vm = NewMessageViewModel()
         
     var body: some View {
         NavigationView {
             ScrollView {
-                ForEach(0..<10) { num in
-                    Text("123")
-                    Divider()
+                Text(vm.errorMessage)
+                
+                ForEach(vm.users) { user in
+                    HStack {
+                        WebImage(url: URL(string: user.profileImageUrl))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 50, height: 50)
+                            .clipped()
+                            .cornerRadius(50)
+                            .shadow(radius: 5)
+                            .overlay(RoundedRectangle.init(cornerRadius: 32).stroke(Color(.label), lineWidth: 1))
+                        Text(user.email)
+                        Spacer()
+                    }.padding(.horizontal)
+                Divider()
+                    .padding(.vertical)
                 }
             }
             .navigationTitle("New Message")
