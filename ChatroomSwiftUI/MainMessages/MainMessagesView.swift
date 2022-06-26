@@ -150,7 +150,9 @@ struct MainMessagesView: View {
         })
         
         .fullScreenCover(isPresented: $shouldShowNewMessageScreen, onDismiss: nil, content: {
-            NewMessageView()
+            NewMessageView(didSelectNewUser: { user in
+                print("\(user.email)")
+            })
         })
     }
     
