@@ -33,7 +33,6 @@ class NewMessageViewModel: ObservableObject {
             })
         }
     }
-    
 }
 
 struct NewMessageView: View {
@@ -48,20 +47,25 @@ struct NewMessageView: View {
                 Text(vm.errorMessage)
                 
                 ForEach(vm.users) { user in
-                    HStack {
-                        WebImage(url: URL(string: user.profileImageUrl))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 50)
-                            .clipped()
-                            .cornerRadius(50)
-                            .shadow(radius: 5)
-                            .overlay(RoundedRectangle.init(cornerRadius: 32).stroke(Color(.label), lineWidth: 1))
-                        Text(user.email)
-                        Spacer()
-                    }.padding(.horizontal)
-                Divider()
-                    .padding(.vertical)
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        HStack(spacing: 16) {
+                            WebImage(url: URL(string: user.profileImageUrl))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipped()
+                                .cornerRadius(50)
+                                .shadow(radius: 5)
+                                .overlay(RoundedRectangle.init(cornerRadius: 32).stroke(Color(.label), lineWidth: 1))
+                            Text(user.email)
+                                .foregroundColor(Color(.label))
+                            Spacer()
+                        }.padding(.horizontal)
+                    Divider()
+                        .padding(.vertical)
+                    })
                 }
             }
             .navigationTitle("New Message")
@@ -69,7 +73,6 @@ struct NewMessageView: View {
                 ToolbarItemGroup(placement: ToolbarItemPlacement.navigationBarLeading) {
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
-                        print("Cancel")
                     }, label: {
                         Text("Cancel")
                     })
