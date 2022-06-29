@@ -11,18 +11,56 @@ struct ChatLogView: View {
     
     let chatUser: ChatUser?
     
+    @State var chatText: String = ""
+    
     var body: some View {
-        ScrollView {
-            ForEach (0..<10) { num in
-                Text("Fake Message View")
+        VStack {
+            ScrollView {
+                ForEach (0..<10) { num in
+                    HStack {
+                        Spacer()
+                        HStack {
+                            Text("Fake Message View")
+                                .foregroundColor(.white)
+                        }
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                }
+                HStack { Spacer() }
             }
-        }.navigationTitle(chatUser?.email ?? "")
+            .background(Color(.init(white: 0.95, alpha: 1)))
+            HStack(spacing: 16) {
+                Image(systemName: "photo.on.rectangle")
+                    .font(.system(size: 24))
+                    .foregroundColor(Color(.darkGray))
+                TextField("Descrpition", text: $chatText)
+                Button(action: {
+                    print(chatText)
+                }, label: {
+                    Text("Send")
+                        .foregroundColor(.white)
+                })
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(Color.blue)
+                .cornerRadius(4)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+        }
+        .navigationTitle(chatUser?.email ?? "")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 struct ChatLogView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatLogView(chatUser: nil)
+        NavigationView {
+            ChatLogView(chatUser: .init(data: ["email": "sixth@gmail.com", "uid": "YQTsynMd7RZp7dMiDk8Ski9qvGp1"]))
+        }
     }
 }
