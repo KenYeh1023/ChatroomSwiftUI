@@ -6,12 +6,44 @@
 //
 
 import SwiftUI
+import Firebase
+
+class ChatLogViewModel: ObservableObject {
+    
+    @Published var chatText: String = ""
+    @Published var errorMessage: String = ""
+    
+    let chatUser: ChatUser?
+    
+    init(chatUser: ChatUser?) {
+        self.chatUser = chatUser
+    }
+    
+    func handleSend() {
+        guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        guard let toId = chatUser?.uid else { return }
+        let document = FirebaseManager.shared.firesotre.collection("messages").document(fromId).collection(toId).document()
+        let data: [String: Any] = ["fromId": fromId, "toId": toId, "text": chatText, "timeStamp": Timestamp()] as [String: Any]
+        
+        document.setData(data) { error in
+            
+            guard let error = error else { return }
+            self.errorMessage = "Failed to Store Text Data, \(error)"
+            
+        }
+    }
+}
 
 struct ChatLogView: View {
     
     let chatUser: ChatUser?
     
-    @State var chatText: String = ""
+    @ObservedObject var vm: ChatLogViewModel
+    
+    init(chatUser: ChatUser?) {
+        self.chatUser = chatUser
+        self.vm = .init(chatUser: chatUser)
+    }
     
     var body: some View {
         VStack {
@@ -51,9 +83,9 @@ struct ChatLogView: View {
             Image(systemName: "photo.on.rectangle")
                 .font(.system(size: 24))
                 .foregroundColor(Color(.darkGray))
-            TextField("Descrpition", text: $chatText)
+            TextField("Descrpition", text: $vm.chatText)
             Button(action: {
-                print(chatText)
+                vm.handleSend()
             }, label: {
                 Text("Send")
                     .foregroundColor(.white)
