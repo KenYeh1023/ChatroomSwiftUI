@@ -27,9 +27,21 @@ class ChatLogViewModel: ObservableObject {
         
         document.setData(data) { error in
             
-            guard let error = error else { return }
-            self.errorMessage = "Failed to Store Text Data, \(error)"
-            return
+            if let error = error {
+                self.errorMessage = "Failed to Store Text Data, \(error)"
+                return
+            }
+            self.chatText = ""
+        }
+        
+        let recipientMessageDocument = FirebaseManager.shared.firesotre.collection("messages").document(toId).collection(fromId).document()
+        
+        recipientMessageDocument.setData(data) { error in
+            
+            if let error = error {
+                self.errorMessage = "Failed to Store Text Data, \(error)"
+                return
+            }
         }
     }
 }
@@ -102,8 +114,9 @@ struct ChatLogView: View {
 
 struct ChatLogView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            ChatLogView(chatUser: .init(data: ["email": "sixth@gmail.com", "uid": "YQTsynMd7RZp7dMiDk8Ski9qvGp1"]))
-        }
+        MainMessagesView()
+//        NavigationView {
+//            ChatLogView(chatUser: .init(data: ["email": "sixth@gmail.com", "uid": "YQTsynMd7RZp7dMiDk8Ski9qvGp1"]))
+//        }
     }
 }
