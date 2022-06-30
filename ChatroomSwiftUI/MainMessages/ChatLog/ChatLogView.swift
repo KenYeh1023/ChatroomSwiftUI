@@ -29,7 +29,7 @@ class ChatLogViewModel: ObservableObject {
             
             guard let error = error else { return }
             self.errorMessage = "Failed to Store Text Data, \(error)"
-            
+            return
         }
     }
 }
@@ -49,7 +49,7 @@ struct ChatLogView: View {
         VStack {
             
             messagesView
-            
+            Text(vm.errorMessage)
             charBottomBar
             
         }
