@@ -26,7 +26,7 @@ class ChatLogViewModel: ObservableObject {
     private func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let toId = chatUser?.uid else { return }
-        FirebaseManager.shared.firesotre.collection("messages").document(fromId).collection(toId).addSnapshotListener { (querySnapshot, error) in
+        FirebaseManager.shared.firesotre.collection("messages").document(fromId).collection(toId).order(by: "timeStamp").addSnapshotListener { (querySnapshot, error) in
             if let error = error {
                 self.errorMessage = "Failed to Fetch Messages Data, \(error)"
                 return
@@ -94,15 +94,30 @@ struct ChatLogView: View {
     private var messagesView: some View {
         ScrollView {
             ForEach (vm.chatMessages) { num in
-                HStack {
-                    Spacer()
-                    HStack {
-                        Text(num.text)
-                            .foregroundColor(.white)
+                VStack {
+                    if num.fromId == FirebaseManager.shared.auth.currentUser?.uid {
+                        HStack {
+                            Spacer()
+                            HStack {
+                                Text(num.text)
+                                    .foregroundColor(.white)
+                            }
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(8)
+                        }
+                    } else {
+                        HStack {
+                            HStack {
+                                Text(num.text)
+                                    .foregroundColor(Color(.label))
+                            }
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(8)
+                            Spacer()
+                        }
                     }
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
                 }
                 .padding(.horizontal)
                 .padding(.top, 8)
@@ -117,7 +132,12 @@ struct ChatLogView: View {
             Image(systemName: "photo.on.rectangle")
                 .font(.system(size: 24))
                 .foregroundColor(Color(.darkGray))
-            TextField("Descrpition", text: $vm.chatText)
+            ZStack {
+                DiscriptionPlaceholder()
+                TextEditor(text: $vm.chatText)
+                    .opacity(vm.chatText.isEmpty ? 0.5 : 1)
+            }
+            .frame(height: 40)
             Button(action: {
                 vm.handleSend()
             }, label: {
@@ -131,6 +151,19 @@ struct ChatLogView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
+    }
+    
+    private struct DiscriptionPlaceholder: View {
+        var body: some View {
+            HStack {
+                Text("Description")
+                    .foregroundColor(Color(.gray))
+                    .font(.system(size: 17))
+                    .padding(.leading, 5)
+                    .padding(.top, -4)
+                Spacer()
+            }
+        }
     }
 }
 
