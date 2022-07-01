@@ -15,6 +15,8 @@ class ChatLogViewModel: ObservableObject {
     
     @Published var chatMessages = [ChatMessage]()
     
+    @Published var count: Int = 0
+    
     let chatUser: ChatUser?
     
     init(chatUser: ChatUser?) {
@@ -38,6 +40,10 @@ class ChatLogViewModel: ObservableObject {
                     self.chatMessages.append(.init(docId: change.document.documentID, data: data))
                 }
             })
+            
+            DispatchQueue.main.async {
+                self.count += 1
+            }
         }
     }
     
@@ -64,6 +70,8 @@ class ChatLogViewModel: ObservableObject {
                 self.errorMessage = "Failed to Store Text Data, \(error)"
                 return
             }
+            
+            self.count += 1
         }
     }
 }
@@ -93,10 +101,20 @@ struct ChatLogView: View {
     
     private var messagesView: some View {
         ScrollView {
-            ForEach (vm.chatMessages) { message in
-                MessageView(message: message)
+            ScrollViewReader { ScrollViewProxy in
+                VStack {
+                    ForEach (vm.chatMessages) { message in
+                        MessageView(message: message)
+                        }
+                    HStack { Spacer() }
+                        .id("down")
+                .onReceive(vm.$count, perform: { _ in
+                    withAnimation(.easeOut(duration: 0.5)) {
+                        ScrollViewProxy.scrollTo("down", anchor: .bottom)
+                        }
+                    })
                 }
-            HStack { Spacer() }
+            }
         }
         .background(Color(.init(white: 0.95, alpha: 1)))
     }
