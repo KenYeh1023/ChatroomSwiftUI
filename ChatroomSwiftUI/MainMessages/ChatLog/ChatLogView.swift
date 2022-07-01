@@ -93,35 +93,9 @@ struct ChatLogView: View {
     
     private var messagesView: some View {
         ScrollView {
-            ForEach (vm.chatMessages) { num in
-                VStack {
-                    if num.fromId == FirebaseManager.shared.auth.currentUser?.uid {
-                        HStack {
-                            Spacer()
-                            HStack {
-                                Text(num.text)
-                                    .foregroundColor(.white)
-                            }
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(8)
-                        }
-                    } else {
-                        HStack {
-                            HStack {
-                                Text(num.text)
-                                    .foregroundColor(Color(.label))
-                            }
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(8)
-                            Spacer()
-                        }
-                    }
+            ForEach (vm.chatMessages) { message in
+                MessageView(message: message)
                 }
-                .padding(.horizontal)
-                .padding(.top, 8)
-            }
             HStack { Spacer() }
         }
         .background(Color(.init(white: 0.95, alpha: 1)))
@@ -151,6 +125,40 @@ struct ChatLogView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
+    }
+    
+    struct MessageView: View {
+        
+        var message: ChatMessage
+        var body: some View {
+            VStack {
+                if message.fromId == FirebaseManager.shared.auth.currentUser?.uid {
+                    HStack {
+                        Spacer()
+                        HStack {
+                            Text(message.text)
+                                .foregroundColor(.white)
+                        }
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                    }
+                } else {
+                    HStack {
+                        HStack {
+                            Text(message.text)
+                                .foregroundColor(Color(.label))
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        Spacer()
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top, 8)
+        }
     }
     
     private struct DiscriptionPlaceholder: View {
