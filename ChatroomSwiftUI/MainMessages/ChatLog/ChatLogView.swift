@@ -31,12 +31,13 @@ class ChatLogViewModel: ObservableObject {
                 self.errorMessage = "Failed to Fetch Messages Data, \(error)"
                 return
             }
-            querySnapshot?.documents.forEach({ (queryDocumentSnapshot) in
-                let data = queryDocumentSnapshot.data()
-                let docId = queryDocumentSnapshot.documentID
-                self.chatMessages.append(.init(docId: docId, data: data))
-            })
             
+            querySnapshot?.documentChanges.forEach({ (change) in
+                if change.type == .added {
+                    let data = change.document.data()
+                    self.chatMessages.append(.init(docId: change.document.documentID, data: data))
+                }
+            })
         }
     }
     
