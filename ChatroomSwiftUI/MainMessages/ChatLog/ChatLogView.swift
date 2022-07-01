@@ -33,7 +33,8 @@ class ChatLogViewModel: ObservableObject {
             }
             querySnapshot?.documents.forEach({ (queryDocumentSnapshot) in
                 let data = queryDocumentSnapshot.data()
-                self.chatMessages.append(.init(data: data))
+                let docId = queryDocumentSnapshot.documentID
+                self.chatMessages.append(.init(docId: docId, data: data))
             })
             
         }
@@ -91,11 +92,11 @@ struct ChatLogView: View {
     
     private var messagesView: some View {
         ScrollView {
-            ForEach (0..<10) { num in
+            ForEach (vm.chatMessages) { num in
                 HStack {
                     Spacer()
                     HStack {
-                        Text("Fake Message View")
+                        Text(num.text)
                             .foregroundColor(.white)
                     }
                     .padding()
