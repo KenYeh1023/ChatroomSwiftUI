@@ -13,10 +13,30 @@ class ChatLogViewModel: ObservableObject {
     @Published var chatText: String = ""
     @Published var errorMessage: String = ""
     
+    @Published var chatMessages = [ChatMessage]()
+    
     let chatUser: ChatUser?
     
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
+        
+        fetchMessages()
+    }
+    
+    private func fetchMessages() {
+        guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        guard let toId = chatUser?.uid else { return }
+        FirebaseManager.shared.firesotre.collection("messages").document(fromId).collection(toId).addSnapshotListener { (querySnapshot, error) in
+            if let error = error {
+                self.errorMessage = "Failed to Fetch Messages Data, \(error)"
+                return
+            }
+            querySnapshot?.documents.forEach({ (queryDocumentSnapshot) in
+                let data = queryDocumentSnapshot.data()
+                self.chatMessages.append(.init(data: data))
+            })
+            
+        }
     }
     
     func handleSend() {
