@@ -23,6 +23,7 @@
 		FCD154F9285ADF55004C2F79 /* MainMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD154F8285ADF55004C2F79 /* MainMessagesView.swift */; };
 		FCD154FD2861737E004C2F79 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD154FC2861737E004C2F79 /* FirebaseManager.swift */; };
 		FCD155042861B8B7004C2F79 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FCD155032861B8B7004C2F79 /* SDWebImageSwiftUI */; };
+		FCD39578287287E80042B541 /* RecentMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD39577287287E80042B541 /* RecentMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		FCD154EC285834F2004C2F79 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		FCD154F8285ADF55004C2F79 /* MainMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesView.swift; sourceTree = "<group>"; };
 		FCD154FC2861737E004C2F79 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		FCD39577287287E80042B541 /* RecentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 			children = (
 				FC5361AE28631473000F3BA7 /* ChatUser.swift */,
 				FC5361BC286E8F87000F3BA7 /* ChatMessage.swift */,
+				FCD39577287287E80042B541 /* RecentMessage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 			files = (
 				FC5361BD286E8F88000F3BA7 /* ChatMessage.swift in Sources */,
 				FC5361AF28631473000F3BA7 /* ChatUser.swift in Sources */,
+				FCD39578287287E80042B541 /* RecentMessage.swift in Sources */,
 				FC5361B9286AADC6000F3BA7 /* ChatLogView.swift in Sources */,
 				FCD154FD2861737E004C2F79 /* FirebaseManager.swift in Sources */,
 				FC5361B42864154A000F3BA7 /* NewMessageView.swift in Sources */,

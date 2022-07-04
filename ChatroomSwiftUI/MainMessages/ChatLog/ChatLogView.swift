@@ -78,12 +78,14 @@ class ChatLogViewModel: ObservableObject {
     }
     
     private func persistRecentMessage() {
+        
+        guard let chatUser = self.chatUser else { return }
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let toId = self.chatUser?.uid else { return }
         
         let document = FirebaseManager.shared.firesotre.collection("recent_messages").document(uid).collection("messages").document(toId)
         
-        let data: [String: Any]  = ["timeStamp": Timestamp(), "text": self.chatText, "fromId": uid, "toId": toId] as [String: Any]
+        let data: [String: Any]  = ["timestamp": Timestamp(), "text": self.chatText, "fromId": uid, "toId": toId, "email": chatUser.email, "profileImageUrl": chatUser.profileImageUrl] as [String: Any]
         
         document.setData(data) { error in
             
