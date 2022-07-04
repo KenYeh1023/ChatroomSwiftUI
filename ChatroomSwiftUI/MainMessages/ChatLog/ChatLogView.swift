@@ -59,7 +59,11 @@ class ChatLogViewModel: ObservableObject {
                 self.errorMessage = "Failed to Store Text Data, \(error)"
                 return
             }
+            
+            self.persistRecentMessage()
+            
             self.chatText = ""
+            self.count += 1
         }
         
         let recipientMessageDocument = FirebaseManager.shared.firesotre.collection("messages").document(toId).collection(fromId).document()
@@ -70,8 +74,23 @@ class ChatLogViewModel: ObservableObject {
                 self.errorMessage = "Failed to Store Text Data, \(error)"
                 return
             }
+        }
+    }
+    
+    private func persistRecentMessage() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        guard let toId = self.chatUser?.uid else { return }
+        
+        let document = FirebaseManager.shared.firesotre.collection("recent_messages").document(uid).collection("messages").document(toId)
+        
+        let data: [String: Any]  = ["timeStamp": Timestamp(), "text": self.chatText, "fromId": uid, "toId": toId] as [String: Any]
+        
+        document.setData(data) { error in
             
-            self.count += 1
+            if let error = error {
+                self.errorMessage = "Failed to save recent message: \(error)"
+                return
+            }
         }
     }
 }
