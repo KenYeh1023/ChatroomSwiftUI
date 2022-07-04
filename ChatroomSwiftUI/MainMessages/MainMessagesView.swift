@@ -31,12 +31,19 @@ class MainMessagesViewModel: ObservableObject {
             .collection("recent_messages")
             .document(uid)
             .collection("messages")
+            .order(by: "timestamp")
             .addSnapshotListener { querySnapshot, error in
                 if let error = error {
                     print("Failed to Fetch Recent Message Due to \(error)")
                 }
                 querySnapshot?.documentChanges.forEach({ (change) in
-                    self.recentMessages.append(.init(documentId: change.document.documentID, data: change.document.data()))
+                    let docId = change.document.documentID
+                    if let index = self.recentMessages.firstIndex(where: { (recentMessage) in
+                        return recentMessage.documentId == docId
+                    }) {
+                        self.recentMessages.remove(at: index)
+                    }
+                    self.recentMessages.insert(.init(documentId: change.document.documentID, data: change.document.data()), at: 0)
                 })
         }
     }
@@ -88,24 +95,29 @@ struct MainMessagesView: View {
     
     private var messageView: some View {
         ScrollView {
-            ForEach(vm.recentMessages) { num in
+            ForEach(vm.recentMessages) { message in
                 VStack {
                     NavigationLink(
                         destination: Text("Navigation Link Destination"),
                         label: {
                             HStack(spacing: 16) {
-                                Image(systemName: "person.fill")
-                                    .font(.system(size: 32))
-                                    .padding(8)
-                                    .overlay(RoundedRectangle(cornerRadius: 44)
+                                WebImage(url: URL(string: message.profileImageUrl))
+                                    .resizable()
+                                    .frame(width: 60, height: 60)
+                                    .scaledToFill()
+                                    .cornerRadius(30)
+                                    .overlay(RoundedRectangle(cornerRadius: 60)
                                                 .stroke(Color(.label), lineWidth: 1)
                                     )
-                                VStack(alignment: .leading) {
-                                    Text("User Name")
+                                    .shadow(radius: 5)
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(message.email.replacingOccurrences(of: "@gmail.com", with: ""))
                                         .font(.system(size: 16, weight: .bold))
-                                    Text("Hello from the other side")
+                                        .foregroundColor(Color(.label))
+                                    Text(message.text)
                                         .font(.system(size: 14))
                                         .foregroundColor(Color(.lightGray))
+                                        .multilineTextAlignment(.leading)
                                 }
                                 Spacer()
                                 Text("22d")
