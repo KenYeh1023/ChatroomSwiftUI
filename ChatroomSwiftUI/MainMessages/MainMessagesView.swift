@@ -13,6 +13,7 @@ class MainMessagesViewModel: ObservableObject {
     @Published var message = ""
     @Published var chatUser: ChatUser?
     @Published var isUserCurrentlyLoggedOut = false
+    @Published var recentMessages: [RecentMessage] = []
     
     init() {
         
@@ -21,6 +22,23 @@ class MainMessagesViewModel: ObservableObject {
         }
         
         fetchCurrentUser()
+        fetchRecentMessages()
+    }
+    
+    private func fetchRecentMessages() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        FirebaseManager.shared.firesotre
+            .collection("recent_messages")
+            .document(uid)
+            .collection("messages")
+            .addSnapshotListener { querySnapshot, error in
+                if let error = error {
+                    print("Failed to Fetch Recent Message Due to \(error)")
+                }
+                querySnapshot?.documentChanges.forEach({ (change) in
+                    self.recentMessages.append(.init(documentId: change.document.documentID, data: change.document.data()))
+                })
+        }
     }
     
     func fetchCurrentUser() {
@@ -70,7 +88,7 @@ struct MainMessagesView: View {
     
     private var messageView: some View {
         ScrollView {
-            ForEach(0..<10, id: \.self) { num in
+            ForEach(vm.recentMessages) { num in
                 VStack {
                     NavigationLink(
                         destination: Text("Navigation Link Destination"),
