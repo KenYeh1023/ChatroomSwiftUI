@@ -15,6 +15,10 @@ struct ChatUser: Identifiable {
     let email: String
     let profileImageUrl: String
     
+    var userName: String {
+        return email.components(separatedBy: "@").first ?? email
+    }
+    
     init(data: [String: Any]) {
         self.uid = data["uid"] as? String ?? ""
         self.email = data["email"] as? String ?? ""

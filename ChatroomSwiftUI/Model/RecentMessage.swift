@@ -20,6 +20,16 @@ struct RecentMessage: Identifiable {
     let profileImageUrl: String
     let timestamp: Timestamp
     
+    var userName: String {
+        return email.components(separatedBy: "@").first ?? self.email
+    }
+    
+    var timeAgo: String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .abbreviated
+        return formatter.localizedString(for: timestamp.dateValue(), relativeTo: Date())
+    }
+    
     init(documentId: String, data: [String: Any]) {
         self.documentId = documentId
         

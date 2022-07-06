@@ -111,7 +111,7 @@ struct MainMessagesView: View {
                                     )
                                     .shadow(radius: 5)
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text(message.email.replacingOccurrences(of: "@gmail.com", with: ""))
+                                    Text(message.userName)
                                         .font(.system(size: 16, weight: .bold))
                                         .foregroundColor(Color(.label))
                                     Text(message.text)
@@ -120,7 +120,7 @@ struct MainMessagesView: View {
                                         .multilineTextAlignment(.leading)
                                 }
                                 Spacer()
-                                Text("22d")
+                                Text(message.timeAgo)
                                     .font(.system(size: 14, weight: .semibold))
                             }.padding(.vertical, 8)
                             Divider()
@@ -141,7 +141,7 @@ struct MainMessagesView: View {
                     .overlay(RoundedRectangle(cornerRadius: 44).stroke(Color(.label), lineWidth: 1))
                     .shadow(radius: 5)
                 VStack(alignment: .leading, spacing: 4) {
-                    let email = vm.chatUser?.email.replacingOccurrences(of: "@gmail.com", with: "") ?? ""
+                    let email = vm.chatUser?.userName ?? ""
                     Text(email)
                         .font(.system(size: 24, weight: .bold))
                     HStack {
