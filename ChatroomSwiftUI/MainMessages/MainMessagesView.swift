@@ -76,6 +76,8 @@ class MainMessagesViewModel: ObservableObject {
 
 struct MainMessagesView: View {
     
+    @State var chatUser: ChatUser?
+    
     @State var shouldShowLogOutOptions: Bool = false
     
     @State var shouldNavigateToChatLogView: Bool = false
@@ -100,45 +102,55 @@ struct MainMessagesView: View {
         shouldShowLogOutOptions.toggle()
     }
     
+    func fetchChatUser(message: RecentMessage) {
+        
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        let chatUserId = uid == message.fromId ? message.toId : message.fromId
+        
+        self.chatUser = .init(data: ["email": message.email, "profileImageUrl": message.profileImageUrl, "uid": chatUserId])
+    }
+    
     private var messageView: some View {
         ScrollView {
             ForEach(vm.recentMessages) { message in
                 VStack {
-                    NavigationLink(
-                        destination: Text("Navigation Link Destination"),
-                        label: {
-                            HStack(spacing: 16) {
-                                WebImage(url: URL(string: message.profileImageUrl))
-                                    .resizable()
-                                    .frame(width: 60, height: 60)
-                                    .scaledToFill()
-                                    .cornerRadius(30)
-                                    .overlay(RoundedRectangle(cornerRadius: 60)
-                                                .stroke(Color(.label), lineWidth: 1)
-                                    )
-                                    .shadow(radius: 5)
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(message.userName)
-                                        .font(.system(size: 16, weight: .bold))
-                                        .foregroundColor(Color(.label))
-                                    Text(message.text)
-                                        .font(.system(size: 14))
-                                        .foregroundColor(Color(.lightGray))
-                                        .multilineTextAlignment(.leading)
-                                        .lineLimit(2)
-                                        .truncationMode(.tail)
-                                }
-                                Spacer()
-                                Text(message.timeAgo)
-                                    .font(.system(size: 14, weight: .semibold))
-                            }.padding(.vertical, 8)
-                            Divider()
-                        })
+                    Button(action: {
+                        fetchChatUser(message: message)
+                        self.shouldNavigateToChatLogView.toggle()
+                    }, label: {
+                        HStack(spacing: 16) {
+                            WebImage(url: URL(string: message.profileImageUrl))
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .scaledToFill()
+                                .cornerRadius(30)
+                                .overlay(RoundedRectangle(cornerRadius: 60)
+                                            .stroke(Color(.label), lineWidth: 1)
+                                )
+                                .shadow(radius: 5)
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(message.userName)
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(Color(.label))
+                                Text(message.text)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(Color(.lightGray))
+                                    .multilineTextAlignment(.leading)
+                                    .lineLimit(2)
+                                    .truncationMode(.tail)
+                            }
+                            Spacer()
+                            Text(message.timeAgo)
+                                .font(.system(size: 14, weight: .semibold))
+                        }.padding(.vertical, 8)
+                        Divider()
+                    })
                 }.padding(.horizontal)
             }
         }.padding(.bottom, 50)
     }
-    
+        
     private var customNavBar: some View {
         VStack {
             HStack(spacing: 16) {
@@ -216,8 +228,6 @@ struct MainMessagesView: View {
             })
         })
     }
-    
-    @State var chatUser: ChatUser?
 }
 
 struct MainMessagesView_Previews: PreviewProvider {
