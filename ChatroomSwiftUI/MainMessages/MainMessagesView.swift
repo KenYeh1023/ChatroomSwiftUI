@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import Firebase
 
 class MainMessagesViewModel: ObservableObject {
     
@@ -14,6 +15,8 @@ class MainMessagesViewModel: ObservableObject {
     @Published var chatUser: ChatUser?
     @Published var isUserCurrentlyLoggedOut = false
     @Published var recentMessages: [RecentMessage] = []
+    
+    private var firestoreListener: ListenerRegistration?
     
     init() {
         
@@ -25,9 +28,13 @@ class MainMessagesViewModel: ObservableObject {
         fetchRecentMessages()
     }
     
-    private func fetchRecentMessages() {
+    func fetchRecentMessages() {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
-        FirebaseManager.shared.firesotre
+        
+        firestoreListener?.remove()
+        self.recentMessages.removeAll()
+        
+        firestoreListener = FirebaseManager.shared.firesotre
             .collection("recent_messages")
             .document(uid)
             .collection("messages")
@@ -118,6 +125,8 @@ struct MainMessagesView: View {
                                         .font(.system(size: 14))
                                         .foregroundColor(Color(.lightGray))
                                         .multilineTextAlignment(.leading)
+                                        .lineLimit(2)
+                                        .truncationMode(.tail)
                                 }
                                 Spacer()
                                 Text(message.timeAgo)
@@ -174,6 +183,7 @@ struct MainMessagesView: View {
                 LoginView(didCompleteLoginProcess: {
                     self.vm.isUserCurrentlyLoggedOut = false
                     self.vm.fetchCurrentUser()
+                    self.vm.fetchRecentMessages()
                 })
             })
         }

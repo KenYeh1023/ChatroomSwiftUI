@@ -19,16 +19,18 @@ class ChatLogViewModel: ObservableObject {
     
     let chatUser: ChatUser?
     
+    var firestoreListener: ListenerRegistration?
+    
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
         
         fetchMessages()
     }
     
-    private func fetchMessages() {
+    func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let toId = chatUser?.uid else { return }
-        FirebaseManager.shared.firesotre.collection("messages").document(fromId).collection(toId).order(by: "timeStamp").addSnapshotListener { (querySnapshot, error) in
+        firestoreListener = FirebaseManager.shared.firesotre.collection("messages").document(fromId).collection(toId).order(by: "timeStamp").addSnapshotListener { (querySnapshot, error) in
             if let error = error {
                 self.errorMessage = "Failed to Fetch Messages Data, \(error)"
                 return
@@ -118,6 +120,9 @@ struct ChatLogView: View {
         }
         .navigationTitle(chatUser?.email ?? "")
         .navigationBarTitleDisplayMode(.inline)
+        .onDisappear(perform: {
+            vm.firestoreListener?.remove()
+        })
     }
     
     private var messagesView: some View {
